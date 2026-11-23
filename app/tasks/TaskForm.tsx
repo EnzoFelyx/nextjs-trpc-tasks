@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { useTRPCClient } from "@/trpc/client";
+import { DESCRIPTION_MAX_LENGTH, TITLE_MAX_LENGTH } from "@/trpc/limits";
 import type { Task } from "@/trpc/router";
 
 type TaskInput = { title: string; description: string };
@@ -58,6 +59,7 @@ export function TaskForm({ task }: Props) {
         <label htmlFor="title">Title</label>
         <input
           id="title"
+          maxLength={TITLE_MAX_LENGTH}
           value={title}
           onChange={(event) => {
             setTitle(event.target.value);
@@ -80,6 +82,7 @@ export function TaskForm({ task }: Props) {
         <textarea
           id="description"
           rows={4}
+          maxLength={DESCRIPTION_MAX_LENGTH}
           value={description}
           onChange={(event) => setDescription(event.target.value)}
         />

@@ -1,5 +1,6 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import { z } from "zod";
+import { DESCRIPTION_MAX_LENGTH, TITLE_MAX_LENGTH } from "./limits";
 
 // One tRPC instance for the whole app. No context is needed:
 // there is no auth and the data lives in memory on the server.
@@ -39,9 +40,21 @@ function findTask(id: string): Task {
 const idInput = z.object({ id: z.string() });
 
 // trim() first so a title made only of spaces is rejected too.
+// max() also keeps oversized payloads out of the in-memory store.
 const taskInput = z.object({
-  title: z.string().trim().min(1, "Title is required"),
-  description: z.string().trim().optional(),
+  title: z
+    .string()
+    .trim()
+    .min(1, "Title is required")
+    .max(TITLE_MAX_LENGTH, `Title must be at most ${TITLE_MAX_LENGTH} characters`),
+  description: z
+    .string()
+    .trim()
+    .max(
+      DESCRIPTION_MAX_LENGTH,
+      `Description must be at most ${DESCRIPTION_MAX_LENGTH} characters`,
+    )
+    .optional(),
 });
 
 export const appRouter = t.router({
