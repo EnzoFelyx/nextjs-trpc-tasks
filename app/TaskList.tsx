@@ -7,16 +7,25 @@ import { useMutation } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 import type { Task } from "@/trpc/router";
 
-type Message = { type: "success" | "error"; text: string };
+// "deleted" is a success shown in red; only "error" is announced as an alert.
+type Message = { type: "success" | "deleted" | "error"; text: string };
 
 type Props = {
   tasks: Task[];
+  saved: boolean; // true right after the form saved a task
 };
 
-export function TaskList({ tasks }: Props) {
+export function TaskList({ tasks, saved }: Props) {
   const trpc = useTRPC();
   const router = useRouter();
-  const [message, setMessage] = useState<Message | null>(null);
+  const [message, setMessage] = useState<Message | null>(
+    saved ? { type: "success", text: "Task saved" } : null,
+  );
+
+  // Remove "?saved=1" from the URL so a page reload does not show the message again.
+  useEffect(() => {
+    if (saved) window.history.replaceState(null, "", "/");
+  }, [saved]);
 
   // Hide the feedback message after a few seconds.
   useEffect(() => {
@@ -28,7 +37,7 @@ export function TaskList({ tasks }: Props) {
   const deleteTask = useMutation(
     trpc.task.delete.mutationOptions({
       onSuccess: () => {
-        setMessage({ type: "success", text: "Task deleted" });
+        setMessage({ type: "deleted", text: "Task deleted" });
         // Re-run the Server Component so the list comes fresh from the server.
         router.refresh();
       },
@@ -38,14 +47,18 @@ export function TaskList({ tasks }: Props) {
 
   return (
     <>
-      {message && (
-        <p
-          className={`message ${message.type}`}
-          role={message.type === "error" ? "alert" : "status"}
-        >
-          {message.text}
-        </p>
-      )}
+      {/* Always rendered with a fixed height, so the message appearing or
+          disappearing does not push the list up and down. */}
+      <div className="message-slot">
+        {message && (
+          <p
+            className={`message ${message.type}`}
+            role={message.type === "error" ? "alert" : "status"}
+          >
+            {message.text}
+          </p>
+        )}
+      </div>
 
       {tasks.length === 0 ? (
         <p className="card">

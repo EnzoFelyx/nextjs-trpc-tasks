@@ -52,7 +52,7 @@ a {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .card {
@@ -104,6 +104,34 @@ a {
   cursor: not-allowed;
 }
 
+.field {
+  margin-bottom: 1rem;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font: inherit;
+}
+
+.field [aria-invalid="true"] {
+  border-color: var(--error);
+}
+
+.field-error {
+  color: var(--error);
+  font-size: 0.875rem;
+}
+
 .message {
   margin: 0 0 1rem;
   padding: 0.75rem 1rem;
@@ -111,12 +139,23 @@ a {
   border: 1px solid;
 }
 
+/* Reserved space for the list feedback message (one line of .message). */
+.message-slot {
+  min-height: 3.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.message-slot .message {
+  margin: 0;
+}
+
 .message.success {
   color: var(--success);
   background: #f0fdf4;
 }
 
-.message.error {
+.message.error,
+.message.deleted {
   color: var(--error);
   background: #fef2f2;
 }

@@ -5,9 +5,15 @@ import { TaskList } from "./TaskList";
 // The tasks change at runtime, so render on every request instead of at build time.
 export const dynamic = "force-dynamic";
 
+type Props = {
+  // The form redirects to "/?saved=1" after a successful save.
+  searchParams: Promise<{ saved?: string }>;
+};
+
 // Server Component: the list is loaded on the server (SSR), so the first
 // render already has the data and needs no loading state.
-export default async function HomePage() {
+export default async function HomePage({ searchParams }: Props) {
+  const { saved } = await searchParams;
   const tasks = await createCaller({}).task.list();
 
   return (
@@ -18,7 +24,7 @@ export default async function HomePage() {
           New task
         </Link>
       </header>
-      <TaskList tasks={tasks} />
+      <TaskList tasks={tasks} saved={saved === "1"} />
     </main>
   );
 }

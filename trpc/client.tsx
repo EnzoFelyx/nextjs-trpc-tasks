@@ -6,8 +6,9 @@ import { createTRPCContext } from "@trpc/tanstack-react-query";
 import { useState } from "react";
 import type { AppRouter } from "./router";
 
-// useTRPC() gives typed query/mutation options for each procedure.
-export const { TRPCProvider, useTRPC } = createTRPCContext<AppRouter>();
+// useTRPC() gives typed query/mutation options for each procedure;
+// useTRPCClient() gives the plain client to call procedures directly.
+export const { TRPCProvider, useTRPC, useTRPCClient } = createTRPCContext<AppRouter>();
 
 export function Providers({ children }: { children: React.ReactNode }) {
   // useState keeps a single instance of each client for the lifetime of the page.
