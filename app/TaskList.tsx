@@ -48,12 +48,13 @@ export function TaskList({ tasks, saved }: Props) {
   return (
     <>
       {/* Always rendered with a fixed height, so the message appearing or
-          disappearing does not push the list up and down. */}
-      <div className="message-slot">
+          disappearing does not push the list up and down. Being always present
+          also lets screen readers announce the text placed inside role="status". */}
+      <div className="message-slot" role="status">
         {message && (
           <p
             className={`message ${message.type}`}
-            role={message.type === "error" ? "alert" : "status"}
+            role={message.type === "error" ? "alert" : undefined}
           >
             {message.text}
           </p>

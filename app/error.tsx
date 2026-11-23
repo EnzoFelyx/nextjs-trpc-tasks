@@ -11,7 +11,7 @@ export default function ErrorPage() {
         <h1>Something went wrong</h1>
       </header>
       <p className="message error" role="alert">
-        The page could not be loaded. Please try again.
+        The page could not be loaded.
       </p>
       <Link href="/">Back to tasks</Link>
     </main>
