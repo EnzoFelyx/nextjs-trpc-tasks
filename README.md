@@ -115,6 +115,19 @@ The assessment describes the task fields in Portuguese. The code uses English na
 - **Dates.** Dates are formatted with a fixed locale (`en-US`). Server and browser can be in different time zones, so the `<time>` element uses `suppressHydrationWarning`, and the server's time zone is shown.
 - **"Task not found" returns HTTP 200.** The page shows the message with a link back. Returning a 404 status would need `notFound()` and an extra `not-found.tsx` file.
 
+## Not implemented: infinite scroll (bonus)
+
+The optional infinite scroll was left out on purpose.
+
+It would need a paginated `task.list` (cursor-based) and a client-side cache of the loaded pages, usually with `useInfiniteQuery`. That cache is exactly what this project avoids. Today the server is the single source of truth, and every mutation simply re-renders the list on the server. With cached pages on the client, each create, update and delete would also have to update or invalidate those pages. That adds edge cases, such as deleting an item on page 3 or creating a task while several pages are loaded.
+
+For an in-memory list in an assessment, that complexity has no real benefit. If the list grew to hundreds of items, I would:
+
+- add a `cursor` and a `limit` to `task.list`;
+- render the first page on the server;
+- load the next pages with `useInfiniteQuery` when a sentinel element becomes visible (`IntersectionObserver`);
+- invalidate the infinite query after each mutation.
+
 ## Known limitations
 
 - Data is not persisted: restarting the server clears all tasks.
