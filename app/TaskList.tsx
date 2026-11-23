@@ -67,7 +67,11 @@ export function TaskList({ tasks, saved }: Props) {
       ) : (
         <ul className="task-list">
           {tasks.map((task) => {
-            const isDeleting = deleteTask.isPending && deleteTask.variables.id === task.id;
+            // Stay disabled after success too, until router.refresh() removes the item,
+            // so a second click cannot trigger a false "Task not found".
+            const isDeleting =
+              (deleteTask.isPending || deleteTask.isSuccess) &&
+              deleteTask.variables.id === task.id;
             return (
               <li key={task.id} className="card">
                 <h2>{task.title}</h2>

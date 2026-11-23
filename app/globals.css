@@ -60,6 +60,7 @@ a {
   border: 1px solid var(--border);
   border-radius: 8px;
   padding: 1rem;
+  overflow-wrap: anywhere; /* long words/URLs wrap instead of overflowing */
 }
 
 .task-list {
@@ -121,6 +122,10 @@ a {
   border: 1px solid var(--border);
   border-radius: 6px;
   font: inherit;
+}
+
+.field textarea {
+  resize: vertical;
 }
 
 .field [aria-invalid="true"] {

@@ -59,7 +59,10 @@ export function TaskForm({ task }: Props) {
         <input
           id="title"
           value={title}
-          onChange={(event) => setTitle(event.target.value)}
+          onChange={(event) => {
+            setTitle(event.target.value);
+            setTitleError(null); // hide the error as soon as the user starts fixing it
+          }}
           aria-invalid={titleError ? true : undefined}
           aria-describedby={titleError ? "title-error" : undefined}
         />
