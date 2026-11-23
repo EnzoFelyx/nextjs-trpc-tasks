@@ -85,3 +85,6 @@ export const appRouter = t.router({
 
 // Only the type is shared with the client, never the server code.
 export type AppRouter = typeof appRouter;
+
+// Lets Server Components call procedures directly, without an HTTP round trip.
+export const createCaller = t.createCallerFactory(appRouter);
